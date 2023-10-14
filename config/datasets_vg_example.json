@@ -1,0 +1,17 @@
+{
+  "train": [
+    {
+      "root": "path/GRIT-20M/data/",
+      "anno": "path/GRIT-20M/anno/grit_odvg_10k.jsonl",
+      "dataset_mode": "odvg"
+    }
+  ],
+  "val": [
+    {
+      "root": "path/coco_2017/val2017",
+      "anno": "config/instances_val2017.json",
+      "label_map": null,
+      "dataset_mode": "coco"
+    }
+  ]
+}
