@@ -1,0 +1,17 @@
+cython
+submitit
+scipy
+termcolor
+addict
+yapf
+timm
+torch
+torchvision
+transformers
+numpy
+opencv-python
+supervision==0.6.0
+pycocotools
+pyyaml>3.10
+h5py>3.0
+colorlog
