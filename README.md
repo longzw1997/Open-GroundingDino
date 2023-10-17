@@ -179,10 +179,10 @@ bash train_multi_node.sh  ${PARTITION} ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DI
 bash train_dist.sh  ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
 
 
-# e.g.  check train_multi_node.sh for more details
-# bash train_multi_node.sh  8 config/cfg_odvg.py config/datasets_mixed_odvg.json ./logs
-# bash train_multi_node.sh  8 config/cfg_coco.py config/datasets_od_example.json ./logs
-# bash train_multi_node.sh  8 config/cfg_odvg.py config/datasets_vg_example.json ./logs
+# e.g.  check train_dist.sh for more details
+# bash train_dist.sh  8 config/cfg_odvg.py config/datasets_mixed_odvg.json ./logs
+# bash train_dist.sh  8 config/cfg_coco.py config/datasets_od_example.json ./logs
+# bash train_dist.sh  8 config/cfg_odvg.py config/datasets_vg_example.json ./logs
 
 
 #eval：
