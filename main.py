@@ -66,9 +66,9 @@ def get_args_parser():
     parser.add_argument('--rank', default=0, type=int,
                         help='number of distributed processes')
     parser.add_argument("--local_rank", type=int, help='local rank for DistributedDataParallel')
+    parser.add_argument("--local-rank", type=int, help='local rank for DistributedDataParallel')
     parser.add_argument('--amp', action='store_true',
                         help="Train with mixed precision")
-    
     return parser
 
 
@@ -171,34 +171,35 @@ def main(args):
                                   weight_decay=args.weight_decay)
 
     logger.debug("build dataset ... ...")
-    num_of_dataset_train = len(dataset_meta["train"])
-    if num_of_dataset_train == 1:
-        dataset_train = build_dataset(image_set='train', args=args, datasetinfo=dataset_meta["train"][0])
-    else:
-        from torch.utils.data import ConcatDataset
-        dataset_train_list = []
-        for idx in range(len(dataset_meta["train"])):
-            dataset_train_list.append(build_dataset(image_set='train', args=args, datasetinfo=dataset_meta["train"][idx]))
-        dataset_train = ConcatDataset(dataset_train_list)
-    dataset_val = build_dataset(image_set='val', args=args, datasetinfo=dataset_meta["val"][0])
-    logger.debug("build dataset, done.")
-    logger.debug(f'number of training dataset: {num_of_dataset_train}, samples: {len(dataset_train)}')
+    if not args.eval:
+        num_of_dataset_train = len(dataset_meta["train"])
+        if num_of_dataset_train == 1:
+            dataset_train = build_dataset(image_set='train', args=args, datasetinfo=dataset_meta["train"][0])
+        else:
+            from torch.utils.data import ConcatDataset
+            dataset_train_list = []
+            for idx in range(len(dataset_meta["train"])):
+                dataset_train_list.append(build_dataset(image_set='train', args=args, datasetinfo=dataset_meta["train"][idx]))
+            dataset_train = ConcatDataset(dataset_train_list)
+        logger.debug("build dataset, done.")
+        logger.debug(f'number of training dataset: {num_of_dataset_train}, samples: {len(dataset_train)}')
 
+    dataset_val = build_dataset(image_set='val', args=args, datasetinfo=dataset_meta["val"][0])
 
     if args.distributed:
-        sampler_train = DistributedSampler(dataset_train)
         sampler_val = DistributedSampler(dataset_val, shuffle=False)
+        if not args.eval:
+            sampler_train = DistributedSampler(dataset_train)
     else:
-        sampler_train = torch.utils.data.RandomSampler(dataset_train)
         sampler_val = torch.utils.data.SequentialSampler(dataset_val)
+        if not args.eval:
+            sampler_train = torch.utils.data.RandomSampler(dataset_train)
 
-    batch_sampler_train = torch.utils.data.BatchSampler(
-        sampler_train, args.batch_size, drop_last=True)
-
-
-    data_loader_train = DataLoader(dataset_train, batch_sampler=batch_sampler_train,
-                                   collate_fn=utils.collate_fn, num_workers=args.num_workers)
-
+    if not args.eval:
+        batch_sampler_train = torch.utils.data.BatchSampler(
+            sampler_train, args.batch_size, drop_last=True)
+        data_loader_train = DataLoader(dataset_train, batch_sampler=batch_sampler_train,
+                                    collate_fn=utils.collate_fn, num_workers=args.num_workers)
 
     data_loader_val = DataLoader(dataset_val, 4, sampler=sampler_val,
                                  drop_last=False, collate_fn=utils.collate_fn, num_workers=args.num_workers)
