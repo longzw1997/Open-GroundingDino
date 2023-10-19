@@ -11,5 +11,5 @@ python -m torch.distributed.launch  --nproc_per_node=${GPU_NUM} main.py \
         --output_dir ${OUTPUT_DIR} \
         -c ${CFG} \
         --datasets ${DATASETS}  \
-        --pretrain_model_path ./weights/groundingdino_swint_ogc.pth \
-        --options text_encoder_type=./bert_weights/bert-base-uncased
+        --pretrain_model_path /path/to/groundingdino_swint_ogc.pth \
+        --options text_encoder_type=/path/to/bert-base-uncased

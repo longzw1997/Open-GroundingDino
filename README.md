@@ -1,7 +1,6 @@
 <div align="center">
-  <img src="figs/cute_dino.png" width="40%">
+  <img src="figs/cute_dino.png" width="35%">
 </div>
-
 
 # Open GroundingDino
 
@@ -12,7 +11,7 @@ This is the third party implementation of the paper **[Grounding DINO: Marrying 
 
 # Supported Features
 
-|                                | Official release version | The Version We Replicated |
+|                                | Official release version | The version we replicated |
 | ------------------------------ | ------------------------ | ------------------------- |
 | Inference                      | &#10004;                 | &#10004;                  |
 | Train (Objecet Detection data) | &#10006;                 | &#10004;                  |
@@ -24,7 +23,7 @@ This is the third party implementation of the paper **[Grounding DINO: Marrying 
 
 # Setup
 
-We test our models under ```python=3.7.11,pytorch=1.11.0,cuda=11.3```. Other versions might be available as well. 
+We test our models under ``python=3.7.11, pytorch=1.11.0, cuda=11.3``. Other versions might be available as well. 
 
 1. Clone the GroundingDINO repository from GitHub.
 
@@ -38,24 +37,11 @@ git clone https://github.com/longzw1997/Open-GroundingDino.git && cd Open-Ground
 pip install -r requirements.txt 
 cd models/GroundingDINO/ops
 python setup.py build install
-# unit test (should see all checking is True)
 python test.py
 cd ../../..
 ```
 
-3. Download [pre-trained model](https://github.com/IDEA-Research/GroundingDINO/releases) and [BERT](https://huggingface.co/bert-base-uncased) weights.
-
-```bash
-mkdir weights
-cd weights
-wget -q https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth
-cd ..
-mkdir bert_weights
-cd bert_weights
-wget -q https://drive.google.com/drive/folders/1eM1HYf2K161YPzIcRDDMzE7S4WBGmDLM?usp=share_link
-cd ..
-```
-
+3. Download [pre-trained model](https://github.com/IDEA-Research/GroundingDINO/releases) and [BERT](https://huggingface.co/bert-base-uncased) weights, then modify the corresponding paths in the train/test script.
 
 # Dataset
 
@@ -141,79 +127,64 @@ config/datasets_mixed_odvg.json      # support mixed dataset for both OD and VG
 
 # Training
 
-* Before starting the training, you need to modify the  ''config/datasets_vg_example.json'' according to ''data_format.md''
-* The evaluation code defaults to using coco_val2017 for evaluation. If you are evaluating with your own test set, you need to convert the test data to coco format (not the ovdg format in data_format.md), and modify the config to set use_coco_eval = False. (The COCO dataset has 80 classes used for training but 90 categories in total, so there is a built-in mapping in the code.)
+- Before starting the training, you need to modify the  ``config/datasets_vg_example.json`` according to ``data_format.md``.
+- The evaluation code defaults to using coco_val2017 for evaluation. If you are evaluating with your own test set, you need to convert the test data to coco format (not the ovdg format in data_format.md), and modify the config to set **use_coco_eval = False** (The COCO dataset has 80 classes used for training but 90 categories in total, so there is a built-in mapping in the code).
 
 
 ```  bash
-# train/eval on slrum cluster：
-bash train_slrum.sh  ${PARTITION} ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
-bash test_slrum.sh  ${PARTITION} ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
-# e.g.  check train_slrum.sh for more details
-# bash train_slrum.sh v100_32g 32 config/cfg_odvg.py config/datasets_mixed_odvg.json ./logs
-# bash train_slrum.sh v100_32g 8 config/cfg_coco.py config/datasets_od_example.json ./logs
-
 # train/eval on torch.distributed.launch:
 bash train_dist.sh  ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
 bash test_dist.sh  ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
-```
 
+# train/eval on slurm cluster：
+bash train_slurm.sh  ${PARTITION} ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
+bash test_slurm.sh  ${PARTITION} ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
+# e.g.  check train_slurm.sh for more details
+# bash train_slurm.sh v100_32g 32 config/cfg_odvg.py config/datasets_mixed_odvg.json ./logs
+# bash train_slurm.sh v100_32g 8 config/cfg_coco.py config/datasets_od_example.json ./logs
+```
 
 # Results and Models
 
-<!-- insert a table -->
-<table>
+<table style="font-size:11px;" >
   <thead>
     <tr style="text-align: right;">
-      <th></th>
       <th>Name</th>
-      <th>Backbone</th>
-      <th>Style</th>
       <th>Pretrain data</th>
+      <th>Task</th>
       <th>mAP on COCO</th>
-      <th>Checkpoint</th>
-      <th>Config</th>
-      <th>log</th>
+      <th>Ckpt</th>
+      <th>Misc</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>1</th>
-      <td>GroundingDINO-T (offical)</td>
-      <td>Swin-T</td>
+      <td>GroundingDINO-T<br>(offical)</td>
+      <td>O365,GoldG,Cap4M</td>
       <td>zero-shot</td>
-      <td>O365,GoldG,Cap4M</td>
-      <td>48.4 (zero-shot) </td>
-      <td><a href="https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth">GitHub link</a> 
-      <td>link</a></td>
-      <td>link</a></td>
+      <td>48.4<br>(zero-shot)</td>
+      <td><a href="https://github.com/IDEA-Research/GroundingDINO/releases/download/v0.1.0-alpha/groundingdino_swint_ogc.pth">model</a> 
+      <td> - </td>
     </tr>
-        <tr>
-      <th>2</th>
-      <td>GroundingDINO-T (finetune) </td>
-      <td>Swin-T</td>
-      <td>use coco finetune</td>
+      <td>GroundingDINO-T<br>(fine-tune)</td>
       <td>O365,GoldG,Cap4M</td>
-      <td>57.3 (fine-tune)</td>
-      <td><a href="https://drive.google.com/file/d/1H9xWCUr1vhrxM9lvENfJUxsXv44JaDee/view?usp=drive_link">GitHub link</a> 
-      <td><a href="https://drive.google.com/file/d/1TJRAiBbVwj3AfxvQAoi1tmuRfXH1hLie/view?usp=drive_link">link</a></td>
-      <td><a href="https://drive.google.com/file/d/1u8XyvBug56SrJY85UtMZFPKUIzV3oNV6/view?usp=drive_link">link</a></td>
+      <td>finetune<br>w/ coco</td>
+      <td><b>57.3</b><br>(fine-tune)</td>
+      <td><a href="https://drive.google.com/file/d/1H9xWCUr1vhrxM9lvENfJUxsXv44JaDee/view?usp=drive_link">model</a> 
+      <td><a href="https://drive.google.com/file/d/1TJRAiBbVwj3AfxvQAoi1tmuRfXH1hLie/view?usp=drive_link">cfg</a> | <a href="https://drive.google.com/file/d/1u8XyvBug56SrJY85UtMZFPKUIzV3oNV6/view?usp=drive_link">log</a></td>
     </tr>
     <tr>
-      <th>3</th>
-      <td>GroundingDINO-T (pretrain)</td>
-      <td>Swin-T</td>
+      <td>GroundingDINO-T<br>(pretrain)</td>
+      <td>COCO,O365,LIVS,V3Det,<br>GRIT-200K,Flickr30k(total 1.8M)</td>
       <td>zero-shot</td>
-      <td>COCO,Objects365,LIVS,V3Det,GRIT-200K,Flickr30k  (total 1.8M)</td>
-      <td>55.1 (zero-shot)</td>
-      <td><a href="https://drive.google.com/file/d/1ayAVNuIXXTGSJv7AyECdibFJVhlFjyux/view?usp=drive_link">GitHub link</a>  
-      <td><a href='https://drive.google.com/file/d/1LwtkvBHkP1OkErKBsVfwjcedVXkyocA5/view?usp=drive_link'>link</a></td>
-      <td><a href="https://drive.google.com/file/d/1kBEFk14OqcYHC7DPdA_BGtk2TBQkJtrL/view?usp=drive_link">link</a></td>
+      <td><b>55.1</b><br>(zero-shot)</td>
+      <td><a href="https://drive.google.com/file/d/1ayAVNuIXXTGSJv7AyECdibFJVhlFjyux/view?usp=drive_link">model</a>  
+      <td><a href='https://drive.google.com/file/d/1LwtkvBHkP1OkErKBsVfwjcedVXkyocA5/view?usp=drive_link'>cfg</a> | <a href="https://drive.google.com/file/d/1kBEFk14OqcYHC7DPdA_BGtk2TBQkJtrL/view?usp=drive_link">log</a></td>
     </tr>
   </tbody>
 </table>
 
-GRIT-200K generated by [GLIP](https://github.com/microsoft/GLIP) and [spaCy](https://spacy.io/).
+- [GRIT](https://huggingface.co/datasets/zzliang/GRIT)-200K generated by [GLIP](https://github.com/microsoft/GLIP) and [spaCy](https://spacy.io/).
 
 
 # Contact
@@ -221,7 +192,6 @@ GRIT-200K generated by [GLIP](https://github.com/microsoft/GLIP) and [spaCy](htt
 - longzuwei at sensetime.com  
 - liwei1 at sensetime.com  
 
-Any discussions, suggestions and questions are welcome!
 # Acknowledgments
 
 Provided codes were adapted from:
@@ -242,5 +212,4 @@ Provided codes were adapted from:
 }
 ```
 
-Feel free to contact me if you have any suggestions or questions, issues are welcome,
-create a PR if you find any bugs or you want to contribute. 
+Feel free to contact we if you have any suggestions or questions. Bugs found are also welcome. Please create a pull request if you find any bugs or want to contribute code.
