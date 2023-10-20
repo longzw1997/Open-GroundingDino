@@ -556,9 +556,9 @@ class SetCriterion(nn.Module):
         # - index_i is the indices of the selected predictions (in order)
         # - index_j is the indices of the corresponding selected targets (in order)
 
-        tgt_ids = [v["labels"] for v in targets]
+        # import pdb; pdb.set_trace()
+        tgt_ids = [v["labels"].cpu() for v in targets]
         # len(tgt_ids) == bs
-        # len(tgt_ids[0]) ->  tensor [tensor([45, 45, 75], device='cuda:0')]
         for i in range(len(indices)):
             tgt_ids[i]=tgt_ids[i][indices[i][1]]
             one_hot[i,indices[i][0]] = label_map_list[i][tgt_ids[i]].to(torch.long)
