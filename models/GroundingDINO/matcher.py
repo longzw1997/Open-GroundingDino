@@ -77,7 +77,7 @@ class HungarianMatcher(nn.Module):
         alpha = self.focal_alpha
         gamma = 2.0
 
-        new_label_map=label_map[tgt_ids]
+        new_label_map=label_map[tgt_ids.cpu()]
 
         neg_cost_class = (1 - alpha) * (out_prob ** gamma) * (-(1 - out_prob + 1e-8).log())
         pos_cost_class = alpha * ((1 - out_prob) ** gamma) * (-(out_prob + 1e-8).log())
