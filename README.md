@@ -128,7 +128,7 @@ config/datasets_mixed_odvg.json      # support mixed dataset for both OD and VG
 # Training
 
 - Before starting the training, you need to modify the  ``config/datasets_vg_example.json`` according to ``data_format.md``.
-- The evaluation code defaults to using coco_val2017 for evaluation. If you are evaluating with your own test set, you need to convert the test data to coco format (not the ovdg format in data_format.md), and modify the config to set **use_coco_eval = False** (The COCO dataset has 80 classes used for training but 90 categories in total, so there is a built-in mapping in the code).
+- The evaluation code defaults to using coco_val2017 for evaluation. If you are evaluating with your own test set, you need to convert the test data to coco format (not the ovdg format in data_format.md), and modify the config to set **use_coco_eval = False** (The COCO dataset has 80 classes used for training but 90 categories in total, so there is a built-in mapping in the code). Also, update the **label_list** in the config with your own class names like **label_list=['dog', 'cat', 'person']**.
 
 
 ```  bash

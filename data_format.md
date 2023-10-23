@@ -51,7 +51,7 @@ Visual Grounding datasets employ the 'grounding' field.
   "detection": {
       "instances": [     
         {
-          "bbox": [262,210,323,338],
+          "bbox": [262,210,323,338],   # [x1,y1,x2,y2]
           "label": 0,
           "category": "dog"
         },
@@ -71,7 +71,7 @@ Visual Grounding datasets employ the 'grounding' field.
       "caption": "a wire hanger with a paper cover that reads we heart our customers", 
       "regions": [
         {
-          "bbox": [20,215,985,665],
+          "bbox": [20,215,985,665],   # [x1,y1,x2,y2]
           "phrase": "a paper cover that reads we heart our customers"
         },
         { 
