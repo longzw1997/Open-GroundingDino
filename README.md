@@ -12,20 +12,20 @@ This is the third party implementation of the paper **[Grounding DINO: Marrying 
 # Supported Features
 
 |                                | Official release version | The version we replicated |
-| ------------------------------ | ------------------------ | ------------------------- |
-| Inference                      | &#10004;                 | &#10004;                  |
-| Train (Objecet Detection data) | &#10006;                 | &#10004;                  |
-| Train (Grounding data)         | &#10006;                 | &#10004;                  |
-| Slurm multi-machine support    | &#10006;                 | &#10004;                  |
-| Training acceleration strategy | &#10006;                 | &#10004;                  |
+| ------------------------------ | :----------------------: | :-----------------------: |
+| Inference                      |         &#10004;         |         &#10004;          |
+| Train (Objecet Detection data) |         &#10006;         |         &#10004;          |
+| Train (Grounding data)         |         &#10006;         |         &#10004;          |
+| Slurm multi-machine support    |         &#10006;         |         &#10004;          |
+| Training acceleration strategy |         &#10006;         |         &#10004;          |
 
 
 
 # Setup
 
-We test our models under ``python=3.7.11, pytorch=1.11.0, cuda=11.3``. Other versions might be available as well. 
+We conduct our model testing using the following versions: Python 3.7.11, PyTorch 1.11.0, and CUDA 11.3. It is possible that other versions are also available.
 
-1. Clone the GroundingDINO repository from GitHub.
+1. Clone this repository.
 
 ```bash
 git clone https://github.com/longzw1997/Open-GroundingDino.git && cd Open-GroundingDino/
@@ -45,9 +45,10 @@ cd ../../..
 
 # Dataset
 
-- Dataset Format -> [data format](data_format.md)
-- See [datasets_mixed_odvg.json](config/datasets_mixed_odvg.json) | [coco2odvg.py](./tools/coco2odvg.py) | [grit2odvg](./tools/grit2odvg.py) for more details
+For **training**, we use the [odvg data format](data_format.md) to support **both OD data and VG data**.  
+Before model training begins, you need to convert your dataset into odvg format, see [data_format.md](data_format.md) | [datasets_mixed_odvg.json](config/datasets_mixed_odvg.json) | [coco2odvg.py](./tools/coco2odvg.py) | [grit2odvg](./tools/grit2odvg.py) for more details.  
 
+For **testing**, we use [coco format](https://cocodataset.org/#format-data), which currently only supports OD datasets.
 
 <details>
   <summary>mixed dataset</summary>
@@ -101,21 +102,21 @@ cd ../../..
   ]
 }
 ```
-
 </details>
 
 <details>
   <summary>example for odvg dataset</summary>
   </br>
 
-``` json
+``` bash
+# For OD
 {"filename": "000000391895.jpg", "height": 360, "width": 640, "detection": {"instances": [{"bbox": [359.17, 146.17, 471.62, 359.74], "label": 3, "category": "motorcycle"}, {"bbox": [339.88, 22.16, 493.76, 322.89], "label": 0, "category": "person"}, {"bbox": [471.64, 172.82, 507.56, 220.92], "label": 0, "category": "person"}, {"bbox": [486.01, 183.31, 516.64, 218.29], "label": 1, "category": "bicycle"}]}}
 {"filename": "000000522418.jpg", "height": 480, "width": 640, "detection": {"instances": [{"bbox": [382.48, 0.0, 639.28, 474.31], "label": 0, "category": "person"}, {"bbox": [234.06, 406.61, 454.0, 449.28], "label": 43, "category": "knife"}, {"bbox": [0.0, 316.04, 406.65, 473.53], "label": 55, "category": "cake"}, {"bbox": [305.45, 172.05, 362.81, 249.35], "label": 71, "category": "sink"}]}}
 
+# For VG
 {"filename": "014127544.jpg", "height": 400, "width": 600, "grounding": {"caption": "Homemade Raw Organic Cream Cheese for less than half the price of store bought! It's super easy and only takes 2 ingredients!", "regions": [{"bbox": [5.98, 2.91, 599.5, 396.55], "phrase": "Homemade Raw Organic Cream Cheese"}]}}
 {"filename": "012378809.jpg", "height": 252, "width": 450, "grounding": {"caption": "naive : Heart graphics in a notebook background", "regions": [{"bbox": [93.8, 47.59, 126.19, 77.01], "phrase": "Heart graphics"}, {"bbox": [2.49, 1.44, 448.74, 251.1], "phrase": "a notebook background"}]}}
 ```
-
 </details>
 
 # Config
@@ -127,7 +128,7 @@ config/datasets_mixed_odvg.json      # support mixed dataset for both OD and VG
 
 # Training
 
-- Before starting the training, you need to modify the  ``config/datasets_vg_example.json`` according to ``data_format.md``.
+- Before starting the training, you need to modify the  ``config/datasets_mixed_example.json`` according to ``data_format.md``.
 - The evaluation code defaults to using coco_val2017 for evaluation. If you are evaluating with your own test set, you need to convert the test data to coco format (not the ovdg format in data_format.md), and modify the config to set **use_coco_eval = False** (The COCO dataset has 80 classes used for training but 90 categories in total, so there is a built-in mapping in the code). Also, update the **label_list** in the config with your own class names like **label_list=['dog', 'cat', 'person']**.
 
 
