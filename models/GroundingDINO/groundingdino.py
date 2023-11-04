@@ -813,14 +813,14 @@ def create_positive_map(tokenized, tokens_positive,cat_list,caption):
         end_ind = start_ind + len(cat_list[label]) - 1
         beg_pos = tokenized.char_to_token(start_ind)
         try:
-            end_pos = tokenized.char_to_token(end_ind - 1)
+            end_pos = tokenized.char_to_token(end_ind)
         except:
             end_pos = None
         if end_pos is None:
             try:
-                end_pos = tokenized.char_to_token(end_ind - 2)
+                end_pos = tokenized.char_to_token(end_ind - 1)
                 if end_pos is None:
-                    end_pos = tokenized.char_to_token(end_ind - 3)
+                    end_pos = tokenized.char_to_token(end_ind - 2)
             except:
                 end_pos = None
         # except Exception as e:
