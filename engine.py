@@ -196,7 +196,7 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
 
 
 
-            for i, (tgt, res, outbbox) in enumerate(zip(targets, results, outputs['pred_boxes'])):
+            for i, (tgt, res) in enumerate(zip(targets, results)):
                 """
                 pred vars:
                     K: number of bbox pred
@@ -212,7 +212,7 @@ def evaluate(model, criterion, postprocessors, data_loader, base_ds, device, out
                 gt_label = tgt['labels']
                 gt_info = torch.cat((gt_bbox, gt_label.unsqueeze(-1)), 1)
 
-                _res_bbox = outbbox
+                _res_bbox = res['boxes']
                 _res_prob = res['scores']
                 _res_label = res['labels']
                 res_info = torch.cat((_res_bbox, _res_prob.unsqueeze(-1), _res_label.unsqueeze(-1)), 1)
