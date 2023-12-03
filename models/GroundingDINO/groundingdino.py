@@ -592,6 +592,7 @@ class SetCriterion(nn.Module):
                     inds = self.matcher(aux_output_single, [targets[j]], label_map_list[j])
                     indices.extend(inds)
                 one_hot_aux = torch.zeros(outputs['pred_logits'].size(),dtype=torch.int64)
+                tgt_ids = [v["labels"].cpu() for v in targets]
                 for i in range(len(indices)):
                     tgt_ids[i]=tgt_ids[i][indices[i][1]]
                     one_hot_aux[i,indices[i][0]] = label_map_list[i][tgt_ids[i]].to(torch.long)
@@ -617,6 +618,7 @@ class SetCriterion(nn.Module):
                 inds = self.matcher(interm_output_single, [targets[j]], label_map_list[j])
                 indices.extend(inds)
             one_hot_aux = torch.zeros(outputs['pred_logits'].size(),dtype=torch.int64)
+            tgt_ids = [v["labels"].cpu() for v in targets]
             for i in range(len(indices)):
                 tgt_ids[i]=tgt_ids[i][indices[i][1]]
                 one_hot_aux[i,indices[i][0]] = label_map_list[i][tgt_ids[i]].to(torch.long)
