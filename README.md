@@ -136,9 +136,17 @@ config/datasets_mixed_odvg.json      # support mixed dataset for both OD and VG
 
 # Training
 
-- Before starting the training, you need to modify the  ``config/datasets_mixed_example.json`` according to ``data_format.md``.
-- The evaluation code defaults to using coco_val2017 for evaluation. If you are evaluating with your own test set, you need to convert the test data to coco format (not the ovdg format in data_format.md), and modify the config to set **use_coco_eval = False** (The COCO dataset has 80 classes used for training but 90 categories in total, so there is a built-in mapping in the code). Also, update the **label_list** in the config with your own class names like **label_list=['dog', 'cat', 'person']**.
+- **Datasets:** before starting the training, you need to modify the ``config/datasets_mixed_example.json`` according to [data_format.md](data_format.md).
+- **Configs:** defaults to using coco_val2017 for evaluation.
+    - If you are evaluating with your own test set, you need to convert the test data to coco format (not the ovdg format) and modify the config to set **use_coco_eval = False** (The COCO dataset has 80 classes used for training but 90 categories in total, so there is a built-in mapping in the code).
+    - Also, add(or update) the **label_list** in the config with your own class names like **label_list=['dog', 'cat', 'person']**.
 
+``` diff
+- use_coco_eval = True
++ use_coco_eval = False
++ label_list=['dog', 'cat', 'person']
+```
+- **Train/Eval**:
 
 ```  bash
 # train/eval on torch.distributed.launch:
@@ -152,6 +160,7 @@ bash test_slurm.sh  ${PARTITION} ${GPU_NUM} ${CFG} ${DATASETS} ${OUTPUT_DIR}
 # bash train_slurm.sh v100_32g 32 config/cfg_odvg.py config/datasets_mixed_odvg.json ./logs
 # bash train_slurm.sh v100_32g 8 config/cfg_coco.py config/datasets_od_example.json ./logs
 ```
+
 
 # Results and Models
 
