@@ -22,7 +22,7 @@ This is the third party implementation of the paper **[Grounding DINO: Marrying 
 |                                | Official release version | The version we replicated |
 | ------------------------------ | :----------------------: | :-----------------------: |
 | Inference                      |         &#10004;         |         &#10004;          |
-| Train (Objecet Detection data) |         &#10006;         |         &#10004;          |
+| Train (Object Detection data) |         &#10006;         |         &#10004;          |
 | Train (Grounding data)         |         &#10006;         |         &#10004;          |
 | Slurm multi-machine support    |         &#10006;         |         &#10004;          |
 | Training acceleration strategy |         &#10006;         |         &#10004;          |
