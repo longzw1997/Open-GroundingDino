@@ -1,3 +1,4 @@
+# todo: each dependency should specify a minimum version
 cython
 submitit
 scipy
@@ -14,3 +15,4 @@ supervision==0.6.0
 pycocotools
 pyyaml>3.10
 colorlog
+jsonlines
